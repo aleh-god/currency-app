@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import by.godevelopment.currencyappsample.databinding.CurrenciesListFragmentBinding
+import by.godevelopment.currencyappsample.presentation.ui.currencieslist.adapters.ListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,21 +28,21 @@ class CurrenciesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = CurrenciesListFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        // TODO: Use the ViewModel
         setupUI()
+        return binding.root
     }
 
     private fun setupUI() {
         setupAdapter()
+        binding.header.text = "Курс беллорусского рубля:"
+        binding.dateOld.text = "01-01-2022"
+        binding.dateNew.text = "31-01-2022"
     }
 
     private fun setupAdapter() {
-
+        binding.rvCurrencies.adapter = ListAdapter().apply {
+            this.listItems = viewModel.list
+        }
     }
 
     override fun onDestroyView() {

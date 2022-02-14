@@ -1,6 +1,7 @@
 package by.godevelopment.currencyappsample.presentation.ui.currencieslist
 
 import androidx.lifecycle.ViewModel
+import by.godevelopment.currencyappsample.data.model.DataTestSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -8,5 +9,5 @@ import javax.inject.Inject
 class CurrenciesListViewModel @Inject constructor(
 
 ) : ViewModel() {
-    // TODO: Implement the ViewModel
+    val list = DataTestSource.listData
 }
