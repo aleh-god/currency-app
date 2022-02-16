@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Currency App Sample</string>
+    <string name="header_rate">Курс белрусского рубля</string>
 </resources>

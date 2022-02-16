@@ -18,7 +18,7 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
             oldItem: ItemCurrencyModel,
             newItem: ItemCurrencyModel
         ): Boolean {
-            return oldItem.cur_value_new == newItem.cur_value_new
+            return oldItem.curName == newItem.curName
         }
 
         override fun areItemsTheSame(
@@ -49,9 +49,9 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
         val item = listItems[position]
         holder.binding.apply {
             abbreviation.text = item.abbreviation
-            curName.text = item.cur_name
-            curValueOld.text = item.cur_value_old
-            curValueNew.text = item.cur_value_new
+            curName.text = item.curName
+            curValueOld.text = item.curValueOld
+            curValueNew.text = item.curValueNew
         }
     }
 

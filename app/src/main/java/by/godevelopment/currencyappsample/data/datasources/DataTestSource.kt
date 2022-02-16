@@ -1,4 +1,4 @@
-package by.godevelopment.currencyappsample.data.model
+package by.godevelopment.currencyappsample.data.datasources
 
 import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 

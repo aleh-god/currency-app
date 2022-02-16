@@ -7,9 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import by.godevelopment.currencyappsample.databinding.CurrenciesListFragmentBinding
+import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 import by.godevelopment.currencyappsample.presentation.ui.currencieslist.adapters.ListAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CurrenciesListFragment : Fragment() {
@@ -33,15 +39,21 @@ class CurrenciesListFragment : Fragment() {
     }
 
     private fun setupUI() {
-        setupAdapter()
-        binding.header.text = "Курс беллорусского рубля:"
-        binding.dateOld.text = "01-01-2022"
-        binding.dateNew.text = "31-01-2022"
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    binding.header.text = it.header
+                    binding.dateOld.text = it.oldData
+                    binding.dateNew.text = it.newData
+                    setupAdapter(it.CurrencyItems)
+                }
+            }
+        }
     }
 
-    private fun setupAdapter() {
+    private fun setupAdapter(listItems: List<ItemCurrencyModel>) {
         binding.rvCurrencies.adapter = ListAdapter().apply {
-            this.listItems = viewModel.list
+            this.listItems = listItems
         }
     }
 
