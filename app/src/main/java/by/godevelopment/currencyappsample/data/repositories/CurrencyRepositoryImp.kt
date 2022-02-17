@@ -27,6 +27,7 @@ class CurrencyRepositoryImp @Inject constructor(
     init {
         coroutineScope.launch {
             val test = fetchAllRatesNew()
+            Log.i(TAG, "CurrencyRepositoryImp: fetchAllRatesNew() size = ${test.size}")
             Log.i(TAG, "CurrencyRepositoryImp: fetchAllRatesNew() $test")
         }
 

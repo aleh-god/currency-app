@@ -1,7 +1,9 @@
 package by.godevelopment.currencyappsample.presentation.ui.currencieslist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.data.datasources.DataTestSource
 import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 import by.godevelopment.currencyappsample.domain.usecase.EmptyParams
@@ -32,6 +34,7 @@ class CurrenciesListViewModel @Inject constructor(
                     )
                 }
                 .catch { exception ->
+                    Log.i(TAG, "viewModelScope.launch.catch: ${exception.message}")
                     _uiState.value = UiState(
                         isFetchingArticles = false,
                         header = "${exception.message}",

@@ -1,6 +1,8 @@
 package by.godevelopment.currencyappsample.domain.usecase
 
+import android.util.Log
 import by.godevelopment.currencyappsample.R
+import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.domain.helpers.DataHelpers
 import by.godevelopment.currencyappsample.domain.helpers.StringHelper
 import by.godevelopment.currencyappsample.domain.models.CurrenciesDataModel
@@ -16,28 +18,32 @@ class GetCurrenciesUseCase @Inject constructor(
     override suspend fun run(params: EmptyParams): CurrenciesDataModel {
         val yesterday = dataHelpers.getYesterdayDateString()
         val currenciesNew = currencyRep.fetchAllRatesNew()
+        Log.i(TAG, "GetCurrenciesUseCase run: currenciesNew.size = ${currenciesNew.size}")
         val currenciesOld = currencyRep.fetchAllRatesOld(yesterday)
-        val newsItems: MutableList<ItemCurrencyModel> = mutableListOf()
+        Log.i(TAG, "GetCurrenciesUseCase run: currenciesOld.size = ${currenciesOld.size}")
+        val currencyItems: MutableList<ItemCurrencyModel> = mutableListOf()
 
         for (newItemRate in currenciesNew) {
-            val oldItemRate = currenciesOld.first { old ->
-                old.abbreviation == newItemRate.abbreviation
+            val oldItemRate = currenciesOld.firstOrNull { old ->
+                old.id == newItemRate.id
             }
-            newsItems.add(
-                ItemCurrencyModel(
-                    abbreviation = newItemRate.abbreviation,
-                    curName = newItemRate.name,
-                    curValueOld = oldItemRate.officialRate.toString(),
-                    curValueNew = newItemRate.officialRate.toString()
+            Log.i(TAG, "GetCurrenciesUseCase run: newItemRate in currenciesNew $oldItemRate")
+            oldItemRate?.let {
+                currencyItems.add(
+                    ItemCurrencyModel(
+                        abbreviation = newItemRate.abbreviation,
+                        curName = newItemRate.name,
+                        curValueOld = oldItemRate.officialRate.toString(),
+                        curValueNew = newItemRate.officialRate.toString()
+                    )
                 )
-            )
-
+            }
         }
         return CurrenciesDataModel(
             header = stringHelper.getString(R.string.header_rate),
             oldData = yesterday,
             newData = dataHelpers.getCurrentDayString(),
-            newsItems
+            currencyItems
         )
     }
 }
