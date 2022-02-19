@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/list_dest">
+
+    <fragment
+        android:id="@+id/list_dest"
+        android:name="by.godevelopment.currencyappsample.presentation.ui.currencieslist.CurrenciesListFragment"
+        android:label="Currencies list"
+        tools:layout="@layout/currencies_list_fragment" >
+        <action
+            android:id="@+id/action_currenciesListFragment_to_settingsFragment"
+            app:destination="@id/settings_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/settings_dest"
+        android:name="by.godevelopment.currencyappsample.presentation.ui.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/settings_fragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_currenciesListFragment"
+            app:destination="@id/list_dest" />
+    </fragment>
+</navigation>

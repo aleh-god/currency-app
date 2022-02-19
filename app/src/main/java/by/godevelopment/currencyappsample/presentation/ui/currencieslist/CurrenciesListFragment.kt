@@ -24,7 +24,7 @@ class CurrenciesListFragment : Fragment() {
         fun newInstance() = CurrenciesListFragment()
     }
 
-    private var _binding: CurrenciesListFragmentBinding ? = null
+    private var _binding: CurrenciesListFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: CurrenciesListViewModel by viewModels()

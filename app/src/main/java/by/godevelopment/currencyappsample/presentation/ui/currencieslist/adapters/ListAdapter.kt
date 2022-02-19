@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.currencyappsample.databinding.ItemCurrencyBinding
 import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 
-class ListAdapter: RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
+class ListAdapter : RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
 
     inner class ItemViewHolder(val binding: ItemCurrencyBinding) : RecyclerView.ViewHolder(binding.root)
 
