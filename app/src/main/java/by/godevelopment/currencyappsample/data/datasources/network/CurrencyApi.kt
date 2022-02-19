@@ -26,10 +26,10 @@ interface CurrencyApi {
     @GET("currencies")
     suspend fun getAllCurrencies(): List<CurrencyApiModel>
 
-    @GET("rates?periodicity=0")
-    suspend fun getAllRatesNew(): List<RateCurrencyApiModel>
+//    @GET("rates?periodicity=0")
+//    suspend fun getAllRatesNew(): List<RateCurrencyApiModel>
 
     @GET("rates?periodicity=0")
-    suspend fun getAllRatesOld(@Query("ondate") oldDate: String): List<RateCurrencyApiModel>
+    suspend fun getAllRatesByDate(@Query("ondate") oldDate: String): List<RateCurrencyApiModel>
 
 }

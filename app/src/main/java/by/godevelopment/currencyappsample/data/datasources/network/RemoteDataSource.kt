@@ -10,9 +10,6 @@ class RemoteDataSource @Inject constructor(
     suspend fun fetchAllCurrencies(): List<CurrencyApiModel> =
         currencyApi.getAllCurrencies()
 
-    suspend fun fetchAllRatesNew(): List<RateCurrencyApiModel> =
-        currencyApi.getAllRatesNew()
-
-    suspend fun fetchAllRatesOld(dateString: String): List<RateCurrencyApiModel> =
-        currencyApi.getAllRatesOld(dateString)
+    suspend fun fetchAllRatesByDate(dateString: String): List<RateCurrencyApiModel> =
+        currencyApi.getAllRatesByDate(dateString)
 }

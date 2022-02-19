@@ -5,8 +5,5 @@ import by.godevelopment.currencyappsample.data.datamodels.RateCurrencyApiModel
 
 interface CurrencyRep {
     suspend fun fetchAllCurrencies(): List<CurrencyApiModel>
-
-    suspend fun fetchAllRatesNew(): List<RateCurrencyApiModel>
-
-    suspend fun fetchAllRatesOld(oldDate: String): List<RateCurrencyApiModel>
+    suspend fun fetchAllRatesByDate(date: String): List<RateCurrencyApiModel>
 }

@@ -21,8 +21,6 @@ class DataHelpers @Inject constructor() {
     @SuppressLint("SimpleDateFormat")
     private fun convertDateToString(day: Date): String {
         val dateFormat: DateFormat = SimpleDateFormat(DATE_FORMAT)    // 2016-7-1
-        val result = dateFormat.format(day)
-        Log.i(TAG, "convertDateToString: $result")
-        return result
+        return dateFormat.format(day)
     }
 }
