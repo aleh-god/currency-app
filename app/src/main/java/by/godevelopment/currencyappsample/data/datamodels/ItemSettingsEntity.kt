@@ -12,7 +12,7 @@ data class ItemSettingsEntity(
     @ColumnInfo(name = "abbreviation")
     val abbreviation: String,
     @ColumnInfo(name = "scale")
-    val scale: String,
+    val scale: Int,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "visible")

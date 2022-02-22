@@ -4,12 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.godevelopment.currencyappsample.commons.TAG
-import by.godevelopment.currencyappsample.data.datasources.DataTestSource
 import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 import by.godevelopment.currencyappsample.domain.usecase.EmptyParams
 import by.godevelopment.currencyappsample.domain.usecase.GetCurrenciesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,10 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrenciesListViewModel @Inject constructor(
     private val getCurrenciesUseCase: GetCurrenciesUseCase
-
 ) : ViewModel() {
-    val list = DataTestSource.listData
-
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
 
@@ -29,7 +24,7 @@ class CurrenciesListViewModel @Inject constructor(
             getCurrenciesUseCase.execute(EmptyParams)
                 .onStart {
                     _uiState.value = UiState(
-                        isFetchingArticles = false,
+                        isFetchingArticles = true,
                         header = "Data is loading..."
                     )
                 }
@@ -44,7 +39,7 @@ class CurrenciesListViewModel @Inject constructor(
                 }
                 .collect {
                     _uiState.value = UiState(
-                        isFetchingArticles = true,
+                        isFetchingArticles = false,
                         header = it.header,
                         oldData = it.oldData,
                         newData = it.newData,

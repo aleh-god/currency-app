@@ -23,7 +23,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepositoryImp(
+    fun provideCurrencyRepositoryImp(
         remoteDataSource: RemoteDataSource,
         rateCurrencyDao: RateCurrencyDao,
         currencyDao: CurrencyDao,
@@ -31,4 +31,11 @@ object AppModule {
         coroutineScope: CoroutineScope
     ): CurrencyRepositoryImp
             = CurrencyRepositoryImp(remoteDataSource, rateCurrencyDao, currencyDao, settingsDao, coroutineScope)
+
+//    @Provides
+//    @Singleton
+//    fun provideSettingsRepositoryImp(
+//        settingsDao: SettingsDao
+//    ): SettingsRepositoryImp
+//            = SettingsRepositoryImp(settingsDao)
 }

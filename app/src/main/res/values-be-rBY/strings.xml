@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Прыкладанне з курсамі валют</string>
+    <string name="header_rate">Курс беларускага рубля</string>
+    <string name="header_settings">Пералік даступных валют:</string>
+    <string name="list_link">Спіс курсаў валют</string>
+    <string name="settings">Наладкі</string>
+</resources>

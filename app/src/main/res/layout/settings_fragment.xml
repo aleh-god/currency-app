@@ -15,41 +15,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/barrier"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/header_fav"
-        android:layout_marginStart="@dimen/margin_start_horizontal_collum"
-        android:layout_marginVertical="5dp"
-        android:gravity="start"
-        tools:text="Перечень доступных валют: "
-        />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/header_fav"
-        android:layout_width="@dimen/width_horizontal_collum"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/barrier"
-        app:layout_constraintStart_toEndOf="@id/header"
-        app:layout_constraintEnd_toStartOf="@id/header_order"
-        android:layout_marginStart="@dimen/margin_start_horizontal_collum"
-        android:layout_marginVertical="5dp"
-        android:gravity="center"
-        tools:text="Favorite"
-        />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/header_order"
-        android:layout_width="@dimen/width_horizontal_collum"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/header_fav"
-        app:layout_constraintBottom_toTopOf="@id/barrier"
-        android:layout_marginVertical="5dp"
-        android:layout_marginStart="@dimen/margin_start_horizontal_collum"
+        android:layout_margin="@dimen/margin_start_horizontal_collum"
+        android:padding="5dp"
         android:gravity="center"
-        tools:text="Order"
+        style="@style/TextAppearance.Material3.BodyMedium"
+        tools:text="Перечень доступных валют: "
         />
 
     <androidx.constraintlayout.widget.Barrier
@@ -57,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="header, header_fav, header_order"
+        app:constraint_referenced_ids="header"
         />
 
     <androidx.recyclerview.widget.RecyclerView

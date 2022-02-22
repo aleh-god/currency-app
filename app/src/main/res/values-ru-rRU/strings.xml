@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Приложение с курсами валют</string>
+    <string name="header_rate">Курс белорусского рубля</string>
+    <string name="header_settings">"Перечень доступных валют: "</string>
+    <string name="list_link">Список курсов валют</string>
+    <string name="settings">Настройки</string>
+</resources>

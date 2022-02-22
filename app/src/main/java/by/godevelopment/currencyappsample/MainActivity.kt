@@ -1,6 +1,7 @@
 package by.godevelopment.currencyappsample
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -9,6 +10,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,14 +30,13 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment
+        = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         _navController = navHostFragment.navController
+
         navController.let {
             binding.bottomNavMenu.setupWithNavController(it)
-            binding.toolbar.setupWithNavController(
-                it,
-                AppBarConfiguration(it.graph)
-            )
+            binding.toolbar.setupWithNavController(it, AppBarConfiguration(it.graph))
         }
     }
 
@@ -41,6 +44,17 @@ class MainActivity : AppCompatActivity() {
         return item.onNavDestinationSelected(navController)
                 || super.onOptionsItemSelected(item)
     }
+
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+//        when(item.itemId) {
+//            R.id.save_settings -> {
+//                Log.i(TAG, "onOptionsItemSelected: save_settings")
+//                true
+//            }
+//            else -> {
+//                super.onOptionsItemSelected(item)
+//            }
+//        }
 
     // To ensure the Back button works properly
     override fun onSupportNavigateUp() = navController.navigateUp()

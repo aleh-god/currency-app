@@ -44,6 +44,7 @@ class GetCurrenciesUseCase @Inject constructor(
                     currencyItems.add(
                         ItemCurrencyModel(
                             abbreviation = newItemRate.abbreviation,
+                            scale = newItemRate.scale,
                             curName = newItemRate.name,
                             curValueOld = oldItemRate.officialRate.toString(),
                             curValueNew = newItemRate.officialRate.toString()

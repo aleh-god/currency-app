@@ -12,7 +12,7 @@ data class CurrencyApiModel(
     @SerializedName("Cur_DateStart")
     val dateStart: String,
     @SerializedName("Cur_ID")
-    val id: Int,
+    val curId: Int,
     @SerializedName("Cur_Name")
     val name: String,
     @SerializedName("Cur_Name_Bel")

@@ -49,6 +49,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.ItemViewHolder>() {
         val item = listItems[position]
         holder.binding.apply {
             abbreviation.text = item.abbreviation
+            curScale.text = item.scale.toString()
             curName.text = item.curName
             curValueOld.text = item.curValueOld
             curValueNew.text = item.curValueNew
