@@ -80,5 +80,6 @@ class SettingsAdapter : RecyclerView.Adapter<SettingsAdapter.ItemViewHolder>() {
         val newList = listItems.toMutableList()
         Collections.swap(newList, fromPosition, toPosition)
         listItems = newList
+        notifyItemMoved(fromPosition, toPosition)
     }
 }

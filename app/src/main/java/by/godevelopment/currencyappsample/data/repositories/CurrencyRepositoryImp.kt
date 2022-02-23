@@ -175,13 +175,14 @@ class CurrencyRepositoryImp @Inject constructor(
         }
 
     override suspend fun saveSettings(settings: List<ItemSettingsEntity>) {
+        Log.i(TAG, "CurrencyRepositoryImp saveSettings: size = ${settings.size}")
         settingsDao.deleteAll()
         settingsDao.insertAllSettings(settings)
     }
 
     private fun createInitSettings(list: List<CurrencyApiModel>): List<ItemSettingsEntity> {
         var countOrder = 3
-        Log.i(TAG, "createInitSettings: list size = ${list.size}")
+        Log.i(TAG, "CurrencyRepositoryImp createInitSettings: list size = ${list.size}")
         val result = list
             .filter {
                 it.dateEnd == CUR_LAST_DAY
@@ -200,7 +201,7 @@ class CurrencyRepositoryImp @Inject constructor(
                     orderPosition = countOrder++
                 )
         }
-        Log.i(TAG, "createInitSettings: result size = ${result.size}")
+        Log.i(TAG, "CurrencyRepositoryImp createInitSettings: result size = ${result.size}")
         return DataInitSettingsSource.listCurrenciesVisibleByDefault + result
     }
 }

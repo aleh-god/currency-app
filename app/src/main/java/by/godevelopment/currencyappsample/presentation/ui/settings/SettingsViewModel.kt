@@ -18,8 +18,6 @@ class SettingsViewModel @Inject constructor(
     private val saveSettingsUseCase: SaveSettingsUseCase,
     private val loadSettingsUseCase: LoadSettingsUseCase
 ) : ViewModel() {
-    val settingsCache: MutableList<ItemSettingsModel> = mutableListOf<ItemSettingsModel>()
-
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
 
@@ -49,9 +47,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun saveCache() {
+    fun saveSettings(settings: List<ItemSettingsModel>) {
         viewModelScope.launch {
-            saveSettingsUseCase.run(settingsCache)
+            saveSettingsUseCase.run(settings)
         }
     }
 

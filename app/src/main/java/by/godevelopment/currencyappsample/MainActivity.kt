@@ -2,7 +2,9 @@ package by.godevelopment.currencyappsample
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -34,30 +36,29 @@ class MainActivity : AppCompatActivity() {
         = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         _navController = navHostFragment.navController
 
+        setupNavUI()
+    }
+
+    private fun setupNavUI() {
         navController.let {
             binding.bottomNavMenu.setupWithNavController(it)
             binding.toolbar.setupWithNavController(it, AppBarConfiguration(it.graph))
         }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val icon = findViewById<View>(R.id.save_settings)
+            if (destination.id == R.id.settings_dest) {
+                icon.visibility = View.VISIBLE
+            } else {
+                icon.visibility = View.GONE
+            }
+        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return item.onNavDestinationSelected(navController)
-                || super.onOptionsItemSelected(item)
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(R.id.save_settings)
+        return super.onPrepareOptionsMenu(menu)
     }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-//        when(item.itemId) {
-//            R.id.save_settings -> {
-//                Log.i(TAG, "onOptionsItemSelected: save_settings")
-//                true
-//            }
-//            else -> {
-//                super.onOptionsItemSelected(item)
-//            }
-//        }
-
-    // To ensure the Back button works properly
-    override fun onSupportNavigateUp() = navController.navigateUp()
 
     override fun onDestroy() {
         super.onDestroy()
