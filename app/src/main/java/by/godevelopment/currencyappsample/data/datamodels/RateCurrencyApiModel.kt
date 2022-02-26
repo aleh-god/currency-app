@@ -6,7 +6,7 @@ data class RateCurrencyApiModel(
     @SerializedName("Cur_Abbreviation")
     val abbreviation: String,
     @SerializedName("Cur_ID")
-    val id: Int,
+    val curId: Int,
     @SerializedName("Cur_Name")
     val name: String,
     @SerializedName("Cur_OfficialRate")

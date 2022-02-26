@@ -1,8 +1,6 @@
 package by.godevelopment.currencyappsample.domain.helpers
 
 import android.annotation.SuppressLint
-import android.util.Log
-import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.data.DATE_FORMAT
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -23,4 +21,7 @@ class DataHelpers @Inject constructor() {
         val dateFormat: DateFormat = SimpleDateFormat(DATE_FORMAT)    // 2016-7-1
         return dateFormat.format(day)
     }
+
+    // Date":"2022-02-17T00:00:00
+    fun convertDateStringToString(dayString: String): String = dayString.substringBefore('T')
 }

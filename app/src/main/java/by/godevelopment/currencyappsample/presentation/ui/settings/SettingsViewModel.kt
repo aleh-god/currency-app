@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.currencyappsample.commons.INIT_VALUE_REFRESH_SETTINGS
 import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.domain.models.ItemSettingsModel
-import by.godevelopment.currencyappsample.domain.usecase.EmptyParams
 import by.godevelopment.currencyappsample.domain.usecase.LoadSettingsUseCase
 import by.godevelopment.currencyappsample.domain.usecase.SaveSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

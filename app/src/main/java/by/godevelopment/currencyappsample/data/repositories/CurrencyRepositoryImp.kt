@@ -106,7 +106,7 @@ class CurrencyRepositoryImp @Inject constructor(
         return RateCurrencyEntity(
             id = 0,
             abbreviation = model.abbreviation,
-            curId = model.id,
+            curId = model.curId,
             name = model.name,
             officialRate = model.officialRate,
             scale = model.scale,
@@ -139,7 +139,7 @@ class CurrencyRepositoryImp @Inject constructor(
     private fun convertRateFromDaoEntityToApiModel(entity: RateCurrencyEntity): RateCurrencyApiModel {
         return RateCurrencyApiModel(
             abbreviation = entity.abbreviation,
-            id = entity.curId,
+            curId = entity.curId,
             name = entity.name,
             officialRate = entity.officialRate,
             scale = entity.scale,

@@ -6,4 +6,5 @@
     <string name="header_settings">List of available currencies:</string>
     <string name="save_settings">Save settings</string>
     <string name="refresh_settings">Refresh settings</string>
+    <string name="error_load">Error!</string>
 </resources>

@@ -2,6 +2,7 @@ package by.godevelopment.currencyappsample.domain.usecase
 
 import android.util.Log
 import by.godevelopment.currencyappsample.R
+import by.godevelopment.currencyappsample.commons.EMPTY_STRING
 import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.domain.helpers.DataHelpers
 import by.godevelopment.currencyappsample.domain.helpers.StringHelper
@@ -12,7 +13,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
-class GetCurrenciesUseCase @Inject constructor(
+class GetAllRatesUseCase @Inject constructor(
     private val currencyRep: CurrencyRep,
     private val dataHelpers: DataHelpers,
     private val stringHelper: StringHelper
@@ -33,29 +34,34 @@ class GetCurrenciesUseCase @Inject constructor(
             val currenciesOld = deferredOldRates.await()
             Log.i(TAG, "GetCurrenciesUseCase run: currenciesNew.size = ${currenciesNew.size}")
             Log.i(TAG, "GetCurrenciesUseCase run: currenciesOld.size = ${currenciesOld.size}")
-
             val currencyItems: MutableList<ItemCurrencyModel> = mutableListOf()
-            for (newItemRate in currenciesNew) {
-                val oldItemRate = currenciesOld.firstOrNull { old ->
-                    old.id == newItemRate.id
-                }
-                // TODO "add cur_id in model"
-                oldItemRate?.let {
-                    currencyItems.add(
-                        ItemCurrencyModel(
-                            abbreviation = newItemRate.abbreviation,
-                            scale = newItemRate.scale,
-                            curName = newItemRate.name,
-                            curValueOld = oldItemRate.officialRate.toString(),
-                            curValueNew = newItemRate.officialRate.toString()
+            var oldData = EMPTY_STRING
+            var newData = EMPTY_STRING
+            if (currenciesNew.isNotEmpty() && currenciesOld.isNotEmpty()) {
+                for (newItemRate in currenciesNew) {
+                    val oldItemRate = currenciesOld.firstOrNull { old ->
+                        old.curId == newItemRate.curId
+                    }
+                    oldItemRate?.let {
+                        currencyItems.add(
+                            ItemCurrencyModel(
+                                curId = newItemRate.curId,
+                                abbreviation = newItemRate.abbreviation,
+                                scale = newItemRate.scale,
+                                curName = newItemRate.name,
+                                curValueOld = oldItemRate.officialRate.toString(),
+                                curValueNew = newItemRate.officialRate.toString()
+                            )
                         )
-                    )
+                    }
                 }
+                oldData = dataHelpers.convertDateStringToString(currenciesOld.first().date)
+                newData = dataHelpers.convertDateStringToString(currenciesNew.first().date)
             }
             CurrenciesDataModel(
                 header = stringHelper.getString(R.string.header_rate),
-                oldData = yesterday,
-                newData = today,
+                oldData,
+                newData,
                 currencyItems
             )
         }
