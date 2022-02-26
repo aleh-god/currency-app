@@ -29,7 +29,7 @@ class SettingsViewModel @Inject constructor(
     fun loadSettings(refresh: Boolean) {
         Log.i(TAG, "loadSettings: $refresh")
         viewModelScope.launch {
-            loadSettingsUseCase.execute(refresh)
+            loadSettingsUseCase(refresh)
                 .onStart {
                     UiState(
                         isFetchingArticles = true,

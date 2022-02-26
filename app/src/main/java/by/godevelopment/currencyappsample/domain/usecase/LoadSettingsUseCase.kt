@@ -7,26 +7,30 @@ import by.godevelopment.currencyappsample.domain.helpers.StringHelper
 import by.godevelopment.currencyappsample.domain.models.ItemSettingsModel
 import by.godevelopment.currencyappsample.domain.models.SettingsDataModel
 import by.godevelopment.currencyappsample.domain.repositories.SettingsRep
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LoadSettingsUseCase @Inject constructor(
     private val settingsRep: SettingsRep,
     private val stringHelper: StringHelper
-) : BaseUseCase<SettingsDataModel, Boolean>() {
-    override suspend fun run(refresh: Boolean): SettingsDataModel {
-        Log.i(TAG, "LoadSettingsUseCase $refresh")
-        return SettingsDataModel(
-            header = stringHelper.getString(R.string.header_settings),
-            settingItems = settingsRep.loadSettings(refresh).map {
-                ItemSettingsModel(
-                    curId = it.curId,
-                    curName = it.name,
-                    abbreviation = it.abbreviation,
-                    scale = it.scale,
-                    isVisible = it.isVisible,
-                    orderPosition = it.orderPosition
+) {
+    suspend operator fun invoke(reset: Boolean): Flow<SettingsDataModel> =
+        settingsRep.loadSettings(reset)
+            .map { list ->
+                Log.i(TAG, "LoadSettingsUseCase $reset")
+                SettingsDataModel(
+                    header = stringHelper.getString(R.string.header_settings),
+                    settingItems = list.map { it ->
+                        ItemSettingsModel(
+                            curId = it.curId,
+                            curName = it.name,
+                            abbreviation = it.abbreviation,
+                            scale = it.scale,
+                            isVisible = it.isVisible,
+                            orderPosition = it.orderPosition
+                        )
+                    }
                 )
             }
-        )
-    }
 }

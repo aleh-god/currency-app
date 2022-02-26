@@ -2,6 +2,7 @@ package by.godevelopment.currencyappsample.presentation.ui.currencieslist
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import by.godevelopment.currencyappsample.R
+import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.databinding.CurrenciesListFragmentBinding
 import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 import by.godevelopment.currencyappsample.presentation.ui.currencieslist.adapters.ListAdapter
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -35,6 +39,7 @@ class CurrenciesListFragment : Fragment() {
     ): View {
         _binding = CurrenciesListFragmentBinding.inflate(inflater, container, false)
         setupUI()
+        setupToolbar()
         return binding.root
     }
 
@@ -54,6 +59,22 @@ class CurrenciesListFragment : Fragment() {
     private fun setupAdapter(listItems: List<ItemCurrencyModel>) {
         binding.rvCurrencies.adapter = ListAdapter().apply {
             this.listItems = listItems
+        }
+    }
+
+    private fun setupToolbar() {
+        activity?.let {
+            val toolbar = it.findViewById<MaterialToolbar>(R.id.toolbar)
+            toolbar.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.refresh_settings -> {
+                        Log.i(TAG, "onOptionsItemSelected: refresh_list ")
+                        viewModel.loadCurrencies()
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
     }
 

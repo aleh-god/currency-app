@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import by.godevelopment.currencyappsample.data.datamodels.ItemSettingsEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SettingsDao {
@@ -12,7 +13,7 @@ interface SettingsDao {
     suspend fun insertAllSettings(listSettings: List<ItemSettingsEntity>)
 
     @Query("SELECT * FROM settings_table")
-    suspend fun getAllSettings(): List<ItemSettingsEntity>
+    fun getAllSettings(): Flow<List<ItemSettingsEntity>>
 
     @Query("DELETE FROM settings_table")
     suspend fun deleteAll()
