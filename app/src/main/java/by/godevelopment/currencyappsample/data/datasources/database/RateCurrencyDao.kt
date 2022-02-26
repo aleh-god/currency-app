@@ -6,7 +6,7 @@ import by.godevelopment.currencyappsample.data.datamodels.RateCurrencyEntity
 @Dao
 interface RateCurrencyDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAllRates(listRates: List<RateCurrencyEntity>)
+    suspend fun insertAllRates(listRates: List<RateCurrencyEntity>): List<Long>
 
     @Query("SELECT * FROM rate_table ORDER BY id DESC")
     suspend fun getAllRates(): List<RateCurrencyEntity>
@@ -18,5 +18,5 @@ interface RateCurrencyDao {
     suspend fun deleteAll()
 
     @Query("DELETE FROM rate_table WHERE date_record = :key")
-    suspend fun deleteAllByDate(key: String)
+    suspend fun deleteAllByDate(key: String): Int
 }

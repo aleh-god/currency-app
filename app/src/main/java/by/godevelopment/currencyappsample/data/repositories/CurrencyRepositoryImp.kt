@@ -34,23 +34,21 @@ class CurrencyRepositoryImp @Inject constructor(
         try {
             Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: try")
             if (currencyCache.isEmpty()) {
-                remoteDataSource.fetchAllCurrencies().also {
-                    Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: size = ${it.size}")
+                val insertData = remoteDataSource.fetchAllCurrencies().also {
+                    Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: fetch = ${it.size}")
                     cacheMutex.withLock {
                         currencyCache = it
                     }
-                        result = it
-//                    coroutineScope.launch {
-//                        Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: .launch")
-//                        val insertList = it.map { model ->
-//                            convertCurrencyFromApiModelToDaoEntity(model)
-//                        }
-//                        Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: size = ${insertList.size}")
-//                        currencyDao.deleteAll()
-//                        currencyDao.insertAllCurrencies(insertList)
-//                        Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: .insert")
-//                    }
+                    result = it
                 }
+                val logDelete = currencyDao.deleteAll()
+                Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: logDelete = $logDelete")
+                val logInsert = currencyDao.insertAllCurrencies(
+                    insertData.map { model ->
+                        convertCurrencyFromApiModelToDaoEntity(model)
+                    }
+                )
+                Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: .insert = ${logInsert.size}")
             } else {
                 Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: else, cache size = ${currencyCache.size}")
                 result = currencyCache
@@ -74,26 +72,24 @@ class CurrencyRepositoryImp @Inject constructor(
                 Log.i(TAG, "CurrencyRepositoryImp fetchAllRatesByDate: else, cache size = ${rateCache.size}")
                 result = dateCache
             } else {
-                remoteDataSource.fetchAllRatesByDate(date).also {
-                    Log.i(TAG, "CurrencyRepositoryImp fetchAllRatesByDate: size = ${it.size}")
+                val insertData = remoteDataSource.fetchAllRatesByDate(date).also {
+                    Log.i(TAG, "CurrencyRepositoryImp fetchAllRatesByDate: fetch = ${it.size}")
                     cacheMutex.withLock {
                         rateCache[date] = it
                     }
-                        result = it
-//                    coroutineScope.launch {
-//                        Log.i(TAG, "CurrencyRepositoryImp fetchAllRatesByDate: .launch")
-//                        rateCurrencyDao.deleteAllByDate(date)
-//                        rateCurrencyDao.insertAllRates(
-//                            it.map { model ->
-//                                convertRateFromApiModelToDaoEntity(model)
-//                            }
-//                        )
-//                        Log.i(TAG, "CurrencyRepositoryImp fetchAllRatesByDate: .insert")
-//                    }
+                    result = it
                 }
+                val logDelete = rateCurrencyDao.deleteAllByDate(date + EMPTY_TIME)
+                Log.i(TAG, "CurrencyRepositoryImp fetchAllRatesByDate: delete = $logDelete")
+                val logInsert = rateCurrencyDao.insertAllRates(
+                    insertData.map { model ->
+                        convertRateFromApiModelToDaoEntity(model)
+                    }
+                )
+                Log.i(TAG, "CurrencyRepositoryImp fetchAllRatesByDate: .insert = ${logInsert.size}")
             }
         } catch(e: Exception) {
-            val query = rateCurrencyDao.getAllRatesByDate(date)
+            val query = rateCurrencyDao.getAllRatesByDate(date + EMPTY_TIME)
             Log.i(TAG, "CurrencyRepositoryImp fetchAllRatesByDate: catch, query size = ${query.size}")
             if (query.isNotEmpty()) result = query.map {
                 convertRateFromDaoEntityToApiModel(it)
@@ -207,7 +203,7 @@ class CurrencyRepositoryImp @Inject constructor(
                     isVisible = false,
                     orderPosition = countOrder++
                 )
-        }
+            }
         Log.i(TAG, "CurrencyRepositoryImp createInitSettings: result size = ${result.size}")
         return DataInitSettingsSource.listCurrenciesVisibleByDefault + result
     }
