@@ -9,10 +9,28 @@ import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.databinding.ItemSettingsBinding
 import by.godevelopment.currencyappsample.domain.models.ItemSettingsModel
-import java.util.*
 
-class SettingsAdapter : RecyclerView.Adapter<SettingsAdapter.ItemViewHolder>() {
-    inner class ItemViewHolder(val binding: ItemSettingsBinding) : RecyclerView.ViewHolder(binding.root)
+class SettingsAdapter (
+    private val changeVisibleCallBack: (Int, Boolean) -> Unit
+        ) : RecyclerView.Adapter<SettingsAdapter.ItemViewHolder>() {
+    inner class ItemViewHolder(
+        private val binding: ItemSettingsBinding
+        ) : RecyclerView.ViewHolder(binding.root) {
+            fun bindView(item: ItemSettingsModel) {
+                binding.apply {
+                    Log.i(TAG, "onBindViewHolder: ${item.abbreviation} check = ${item.isVisible}")
+                    btnSwitch.setOnCheckedChangeListener(null)
+                    abbreviation.text = item.abbreviation
+                    curScale.text = item.scale.toString()
+                    curName.text = item.curName
+                    btnSwitch.isChecked = item.isVisible
+                    btnSwitch.setOnCheckedChangeListener { _, isChecked ->
+                        changeVisibleCallBack(item.curId, isChecked)
+                        Log.i(TAG, "setOnCheckedChangeListener: ${item.abbreviation} check = $isChecked")
+                    }
+                }
+            }
+        }
 
     private val diffCallback
             = object : DiffUtil.ItemCallback<ItemSettingsModel>() {
@@ -51,35 +69,21 @@ class SettingsAdapter : RecyclerView.Adapter<SettingsAdapter.ItemViewHolder>() {
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = listItems[position]
-        holder.binding.apply {
-            Log.i(TAG, "onBindViewHolder: ${item.abbreviation} pos = $position check = ${item.isVisible}")
-            btnSwitch.setOnCheckedChangeListener(null)
-            abbreviation.text = item.abbreviation
-            curScale.text = item.scale.toString()
-            curName.text = item.curName
-            btnSwitch.isChecked = item.isVisible
-            btnSwitch.setOnCheckedChangeListener { _, isChecked ->
-                changeVisibleStatus(position, isChecked)
-                Log.i(TAG, "setOnCheckedChangeListener: ${item.abbreviation} pos = $position check = $isChecked")
-            }
-        }
+        holder.bindView(item)
     }
 
     override fun getItemCount(): Int = listItems.size
 
-    private fun changeVisibleStatus(position: Int, isChecked: Boolean) {
-        val newList = listItems.toMutableList()
-        val originItem = newList[position]
-        val newItem = originItem.copy(isVisible = isChecked)
-        newList[position] = newItem
-        listItems = newList
-    }
-
     fun moveItem(fromPosition: Int, toPosition: Int) {
         Log.i(TAG, "moveItem: fromPosition = $fromPosition toPosition = $toPosition")
         val newList = listItems.toMutableList()
-        Collections.swap(newList, fromPosition, toPosition)
-        listItems = newList
-        notifyItemMoved(fromPosition, toPosition)
+        val fromItem = newList[fromPosition]
+        newList.removeAt(fromPosition)
+        if (toPosition < fromPosition) {
+            newList.add(toPosition + 1 , fromItem)
+        } else {
+            newList.add(toPosition - 1, fromItem)
+        }
+        differ.submitList(newList)
     }
 }

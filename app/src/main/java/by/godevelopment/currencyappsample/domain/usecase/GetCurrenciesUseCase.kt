@@ -39,7 +39,7 @@ class GetCurrenciesUseCase @Inject constructor(
                 val oldItemRate = currenciesOld.firstOrNull { old ->
                     old.id == newItemRate.id
                 }
-//                Log.i(TAG, "GetCurrenciesUseCase run: newItemRate in currenciesNew $oldItemRate")
+                // TODO "add cur_id in model"
                 oldItemRate?.let {
                     currencyItems.add(
                         ItemCurrencyModel(

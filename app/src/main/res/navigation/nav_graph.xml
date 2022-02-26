@@ -17,7 +17,8 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"
+            />
     </fragment>
     <fragment
         android:id="@+id/settings_dest"
@@ -26,6 +27,11 @@
         tools:layout="@layout/settings_fragment" >
         <action
             android:id="@+id/action_settingsFragment_to_currenciesListFragment"
-            app:destination="@id/list_dest" />
+            app:destination="@id/list_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
     </fragment>
 </navigation>

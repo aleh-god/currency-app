@@ -11,7 +11,6 @@ import by.godevelopment.currencyappsample.data.datasources.network.RemoteDataSou
 import by.godevelopment.currencyappsample.domain.repositories.CurrencyRep
 import by.godevelopment.currencyappsample.domain.repositories.SettingsRep
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
@@ -168,11 +167,15 @@ class CurrencyRepositoryImp @Inject constructor(
         )
     }
 
-    override suspend fun loadSettings(): List<ItemSettingsEntity> =
-        settingsDao.getAllSettings().ifEmpty {
+    override suspend fun loadSettings(refresh: Boolean): List<ItemSettingsEntity> {
+        return if (!refresh) settingsDao.getAllSettings().ifEmpty {
+            val listApi = fetchAllCurrencies()
+            createInitSettings(listApi)
+        } else {
             val listApi = fetchAllCurrencies()
             createInitSettings(listApi)
         }
+    }
 
     override suspend fun saveSettings(settings: List<ItemSettingsEntity>) {
         Log.i(TAG, "CurrencyRepositoryImp saveSettings: size = ${settings.size}")

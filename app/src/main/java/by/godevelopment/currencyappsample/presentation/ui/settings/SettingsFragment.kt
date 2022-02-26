@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.currencyappsample.R
 import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.databinding.SettingsFragmentBinding
-import by.godevelopment.currencyappsample.domain.models.ItemSettingsModel
 import by.godevelopment.currencyappsample.presentation.ui.settings.adapters.SettingsAdapter
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,27 +59,30 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = SettingsFragmentBinding.inflate(inflater, container, false)
-        setupUI()
         setupToolbar()
+        setupRv()
+        setupUI()
         return binding.root
+    }
+
+    private fun setupRv() {
+        Log.i(TAG, "SettingsFragment setupRv")
+        val callback: (Int, Boolean) -> Unit = { pos, vis -> viewModel.changeVision(pos, vis) }
+        binding.rvSettings.adapter = SettingsAdapter(callback)
+        helper.attachToRecyclerView(binding.rvSettings)
     }
 
     private fun setupUI() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    binding.header.text = it.header
-                    setupAdapter(it.settingsItems)
+                viewModel.uiState.collect { uiState ->
+                    binding.header.text = uiState.header
+                    Log.i(TAG, "SettingsFragment setupUI: ${uiState.settingsItems.size}")
+                    val adapter = binding.rvSettings.adapter as SettingsAdapter
+                    adapter.listItems = uiState.settingsItems
                 }
             }
         }
-    }
-
-    private fun setupAdapter(listItems: List<ItemSettingsModel>) {
-        binding.rvSettings.adapter = SettingsAdapter().apply {
-            this.listItems = listItems
-        }
-        helper.attachToRecyclerView(binding.rvSettings)
     }
 
     private fun setupToolbar() {
@@ -90,10 +91,14 @@ class SettingsFragment : Fragment() {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.save_settings -> {
-                        val adapter = binding.rvSettings.adapter as SettingsAdapter
-                        val settingsList = adapter.listItems
+                        val settingsList = viewModel.uiState.value.settingsItems
                         Log.i(TAG, "onOptionsItemSelected: save_list = ${settingsList.size}")
                         viewModel.saveSettings(settingsList)
+                        true
+                    }
+                    R.id.refresh_settings -> {
+                        Log.i(TAG, "onOptionsItemSelected: refresh_list ")
+                        viewModel.loadSettings(true)
                         true
                     }
                     else -> false

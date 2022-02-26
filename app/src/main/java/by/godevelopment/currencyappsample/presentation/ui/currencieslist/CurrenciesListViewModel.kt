@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 import by.godevelopment.currencyappsample.domain.usecase.EmptyParams
-import by.godevelopment.currencyappsample.domain.usecase.GetCurrenciesUseCase
+
+import by.godevelopment.currencyappsample.domain.usecase.SortCurrenciesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -14,14 +15,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrenciesListViewModel @Inject constructor(
-    private val getCurrenciesUseCase: GetCurrenciesUseCase
+    private val sortCurrenciesUseCase: SortCurrenciesUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
 
     init {
         viewModelScope.launch {
-            getCurrenciesUseCase.execute(EmptyParams)
+            sortCurrenciesUseCase.execute(EmptyParams)
                 .onStart {
                     _uiState.value = UiState(
                         isFetchingArticles = true,
@@ -43,7 +44,7 @@ class CurrenciesListViewModel @Inject constructor(
                         header = it.header,
                         oldData = it.oldData,
                         newData = it.newData,
-                        CurrencyItems = it.CurrencyItems
+                        CurrencyItems = it.currencyItems
                     )
                 }
         }

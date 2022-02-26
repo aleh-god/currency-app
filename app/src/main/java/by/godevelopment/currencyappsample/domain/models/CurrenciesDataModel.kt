@@ -4,6 +4,6 @@ data class CurrenciesDataModel(
     val header: String = "",
     val oldData: String = "",
     val newData: String = "",
-    val CurrencyItems: List<ItemCurrencyModel> = listOf()
+    val currencyItems: List<ItemCurrencyModel> = listOf()
 )
 

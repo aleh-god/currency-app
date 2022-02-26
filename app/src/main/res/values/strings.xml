@@ -5,4 +5,5 @@
     <string name="list_link">Rates list</string>
     <string name="header_settings">List of available currencies:</string>
     <string name="save_settings">Save settings</string>
+    <string name="refresh_settings">Refresh settings</string>
 </resources>
