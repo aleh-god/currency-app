@@ -52,9 +52,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun saveSettings(settings: List<ItemSettingsModel>) {
+    fun saveSettings(listItems: List<ItemSettingsModel>) {
         viewModelScope.launch {
-            saveSettingsUseCase.run(settings)
+            saveSettingsUseCase.run(listItems)
         }
         // TODO "add alert"
     }

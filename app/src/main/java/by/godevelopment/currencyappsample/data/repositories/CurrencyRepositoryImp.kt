@@ -167,10 +167,14 @@ class CurrencyRepositoryImp @Inject constructor(
 
     override suspend fun loadSettings(reset: Boolean): Flow<List<ItemSettingsEntity>> =
         settingsDao.getAllSettings()
-            .map {
-                if (!reset) it.ifEmpty {
-                    val listApi = fetchAllCurrencies()
-                    createInitSettings(listApi)
+            .map { listDao ->
+                Log.i(TAG, "CurrencyRepositoryImp loadSettings: reset = $reset")
+                if (!reset) {
+                    Log.i(TAG, "CurrencyRepositoryImp loadSettings: list = ${listDao.size}")
+                    listDao.ifEmpty {
+                        val listApi = fetchAllCurrencies()
+                        createInitSettings(listApi)
+                    }
                 } else {
                     val listApi = fetchAllCurrencies()
                     createInitSettings(listApi)
@@ -180,7 +184,8 @@ class CurrencyRepositoryImp @Inject constructor(
     override suspend fun saveSettings(settings: List<ItemSettingsEntity>) {
         Log.i(TAG, "CurrencyRepositoryImp saveSettings: size = ${settings.size}")
         settingsDao.deleteAll()
-        settingsDao.insertAllSettings(settings)
+        val logInsert = settingsDao.insertAllSettings(settings)
+        Log.i(TAG, "CurrencyRepositoryImp saveSettings: insert = ${logInsert.size}")
     }
 
     private fun createInitSettings(list: List<CurrencyApiModel>): List<ItemSettingsEntity> {

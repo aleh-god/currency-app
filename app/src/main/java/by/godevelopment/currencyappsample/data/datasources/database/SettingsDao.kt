@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SettingsDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAllSettings(listSettings: List<ItemSettingsEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllSettings(listSettings: List<ItemSettingsEntity>): List<Long>
 
     @Query("SELECT * FROM settings_table")
     fun getAllSettings(): Flow<List<ItemSettingsEntity>>

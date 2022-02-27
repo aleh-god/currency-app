@@ -1,5 +1,6 @@
 package by.godevelopment.currencyappsample.presentation.ui.settings
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.currencyappsample.R
 import by.godevelopment.currencyappsample.commons.TAG
@@ -32,6 +34,12 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: SettingsViewModel by viewModels()
+    private val adapter: SettingsAdapter by lazy {
+        val callback: (Int, Boolean) -> Unit = {
+                pos, vis -> viewModel.changeVision(pos, vis)
+        }
+        SettingsAdapter(callback)
+    }
 
     private val helper: ItemTouchHelper = ItemTouchHelper(
         object : ItemTouchHelper.SimpleCallback(
@@ -51,6 +59,24 @@ class SettingsFragment : Fragment() {
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             }
+
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                super.onSelectedChanged(viewHolder, actionState)
+                if(actionState == ACTION_STATE_DRAG) {
+                    viewHolder?.itemView?.scaleY = 1.3f
+                    viewHolder?.itemView?.alpha = 0.7f
+
+                }
+            }
+
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
+                viewHolder.itemView.scaleY = 1.0f
+                viewHolder.itemView.alpha = 1.0f
+                super.clearView(recyclerView, viewHolder)
+            }
         }
     )
 
@@ -67,8 +93,7 @@ class SettingsFragment : Fragment() {
 
     private fun setupRv() {
         Log.i(TAG, "SettingsFragment setupRv")
-        val callback: (Int, Boolean) -> Unit = { pos, vis -> viewModel.changeVision(pos, vis) }
-        binding.rvSettings.adapter = SettingsAdapter(callback)
+        binding.rvSettings.adapter = adapter
         helper.attachToRecyclerView(binding.rvSettings)
     }
 
@@ -78,7 +103,6 @@ class SettingsFragment : Fragment() {
                 viewModel.uiState.collect { uiState ->
                     binding.header.text = uiState.header
                     Log.i(TAG, "SettingsFragment setupUI: ${uiState.settingsItems.size}")
-                    val adapter = binding.rvSettings.adapter as SettingsAdapter
                     adapter.listItems = uiState.settingsItems
                 }
             }
@@ -91,9 +115,9 @@ class SettingsFragment : Fragment() {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.save_settings -> {
-                        val settingsList = viewModel.uiState.value.settingsItems
-                        Log.i(TAG, "onOptionsItemSelected: save_list = ${settingsList.size}")
-                        viewModel.saveSettings(settingsList)
+                        Log.i(TAG, "onOptionsItemSelected: save")
+                        val listItems = adapter.listItems
+                        viewModel.saveSettings(listItems)
                         true
                     }
                     R.id.refresh_settings -> {

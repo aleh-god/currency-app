@@ -1,6 +1,8 @@
 package by.godevelopment.currencyappsample.domain.usecase
 
+import android.util.Log
 import by.godevelopment.currencyappsample.commons.INIT_VALUE_REFRESH_SETTINGS
+import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.domain.models.CurrenciesDataModel
 import by.godevelopment.currencyappsample.domain.repositories.SettingsRep
 import kotlinx.coroutines.flow.Flow
@@ -33,6 +35,7 @@ class PrepareCurrenciesUseCase @Inject constructor(
                     .sortedBy {
                         orderMap[it.curId]
                     }
+                Log.i(TAG, "PrepareCurrenciesUseCase resultList = ${resultList.size}")
                 currenciesDataModel.copy(
                     currencyItems = resultList
                 )

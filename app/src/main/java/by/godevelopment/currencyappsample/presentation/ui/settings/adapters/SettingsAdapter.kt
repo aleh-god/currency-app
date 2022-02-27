@@ -26,7 +26,7 @@ class SettingsAdapter (
                     btnSwitch.isChecked = item.isVisible
                     btnSwitch.setOnCheckedChangeListener { _, isChecked ->
                         changeVisibleCallBack(item.curId, isChecked)
-                        Log.i(TAG, "setOnCheckedChangeListener: ${item.abbreviation} check = $isChecked")
+                        Log.i(TAG, "setOnCheckedChangeListener: ${item.orderPosition} = ${item.abbreviation} check = $isChecked")
                     }
                 }
             }

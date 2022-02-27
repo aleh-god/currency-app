@@ -11,7 +11,7 @@ class SaveSettingsUseCase @Inject constructor(
     private val settingsRep: SettingsRep
 ) : BaseUseCase<Unit, List<ItemSettingsModel>>() {
     override suspend fun run(params: List<ItemSettingsModel>) {
-        Log.i(TAG, "SaveSettingsUseCase: ${params.size}")
+        Log.i(TAG, "SaveSettingsUseCase: list = ${params.size}")
         settingsRep.saveSettings(
             params.map {
                 ItemSettingsEntity(

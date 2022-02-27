@@ -18,7 +18,7 @@ class LoadSettingsUseCase @Inject constructor(
     suspend operator fun invoke(reset: Boolean): Flow<SettingsDataModel> =
         settingsRep.loadSettings(reset)
             .map { list ->
-                Log.i(TAG, "LoadSettingsUseCase $reset")
+                Log.i(TAG, "LoadSettingsUseCase reset = $reset")
                 SettingsDataModel(
                     header = stringHelper.getString(R.string.header_settings),
                     settingItems = list.map { it ->
@@ -31,6 +31,9 @@ class LoadSettingsUseCase @Inject constructor(
                             orderPosition = it.orderPosition
                         )
                     }
+                        .sortedBy {
+                            it.orderPosition
+                        }
                 )
             }
 }
