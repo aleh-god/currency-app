@@ -15,7 +15,7 @@ class SaveSettingsUseCase @Inject constructor(
         settingsRep.saveSettings(
             params.map {
                 ItemSettingsEntity(
-                    id = 0,
+                    id = it.id,
                     curId = it.curId,
                     abbreviation = it.abbreviation,
                     name = it.curName,

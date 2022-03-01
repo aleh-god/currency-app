@@ -2,7 +2,10 @@ package by.godevelopment.currencyappsample.data.repositories
 
 import android.util.Log
 import by.godevelopment.currencyappsample.commons.*
-import by.godevelopment.currencyappsample.data.datamodels.*
+import by.godevelopment.currencyappsample.data.datamodels.CurrencyApiModel
+import by.godevelopment.currencyappsample.data.datamodels.ItemSettingsEntity
+import by.godevelopment.currencyappsample.data.datamodels.RateCurrencyApiModel
+import by.godevelopment.currencyappsample.data.datamodels.RateCurrencyEntity
 import by.godevelopment.currencyappsample.data.datasources.DataInitSettingsSource
 import by.godevelopment.currencyappsample.data.datasources.database.CurrencyDao
 import by.godevelopment.currencyappsample.data.datasources.database.RateCurrencyDao
@@ -12,7 +15,9 @@ import by.godevelopment.currencyappsample.domain.repositories.CurrencyRep
 import by.godevelopment.currencyappsample.domain.repositories.SettingsRep
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
@@ -26,42 +31,23 @@ class CurrencyRepositoryImp @Inject constructor(
 ) : CurrencyRep, SettingsRep {
 
     private val cacheMutex = Mutex()
-    private var currencyCache: List<CurrencyApiModel> = emptyList()
     private var rateCache = mutableMapOf<String, List<RateCurrencyApiModel>>()
 
-    override suspend fun fetchAllCurrencies(): List<CurrencyApiModel> {
-        var result: List<CurrencyApiModel> = emptyList()
-        try {
-            Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: try")
-            if (currencyCache.isEmpty()) {
-                val insertData = remoteDataSource.fetchAllCurrencies().also {
-                    Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: fetch = ${it.size}")
-                    cacheMutex.withLock {
-                        currencyCache = it
-                    }
-                    result = it
-                }
-                val logDelete = currencyDao.deleteAll()
-                Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: logDelete = $logDelete")
-                val logInsert = currencyDao.insertAllCurrencies(
-                    insertData.map { model ->
-                        convertCurrencyFromApiModelToDaoEntity(model)
-                    }
-                )
-                Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: .insert = ${logInsert.size}")
-            } else {
-                Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: else, cache size = ${currencyCache.size}")
-                result = currencyCache
-            }
-        } catch(e: Exception) {
-            val query = currencyDao.getAllCurrencies()
-            Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: catch, query size = ${query.size}")
-            if (query.isNotEmpty()) result = query.map {
-                convertCurrencyFromDaoEntityToApiModel(it)
-            }
+    init {
+        coroutineScope.launch {
+            val check = settingsDao.getAllSettings().firstOrNull()
+            if (check.isNullOrEmpty()) createSettings()
         }
-        return result
     }
+
+    override suspend fun fetchAllCurrencies(): List<CurrencyApiModel> =
+        try {
+            Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: start")
+            remoteDataSource.fetchAllCurrencies()
+        } catch(e: Exception) {
+            Log.i(TAG, "CurrencyRepositoryImp fetchAllCurrencies: catch")
+            emptyList()
+        }
 
     override suspend fun fetchAllRatesByDate(date: String): List<RateCurrencyApiModel> {
         var result: List<RateCurrencyApiModel> = emptyList()
@@ -110,28 +96,6 @@ class CurrencyRepositoryImp @Inject constructor(
         )
     }
 
-    private fun convertCurrencyFromApiModelToDaoEntity(model: CurrencyApiModel): CurrencyEntity {
-        return CurrencyEntity(
-            id = 0,
-            abbreviation = model.abbreviation,
-            code = model.code,
-            curId = model.curId,
-            name = model.name,
-            nameBel = model.nameBel,
-            nameBelMulti = model.nameBelMulti,
-            nameEng = model.nameEng,
-            nameEngMulti = model.nameEngMulti,
-            nameMulti = model.nameMulti,
-            parentID = model.parentID,
-            periodicity = model.periodicity,
-            quotName = model.quotName,
-            quotNameBel = model.quotNameBel,
-            quotNameEng = model.quotNameEng,
-            scale = model.scale,
-            dateRecord = model.dateEnd
-        )
-    }
-
     private fun convertRateFromDaoEntityToApiModel(entity: RateCurrencyEntity): RateCurrencyApiModel {
         return RateCurrencyApiModel(
             abbreviation = entity.abbreviation,
@@ -143,43 +107,11 @@ class CurrencyRepositoryImp @Inject constructor(
         )
     }
 
-    private fun convertCurrencyFromDaoEntityToApiModel(entity: CurrencyEntity): CurrencyApiModel {
-        return CurrencyApiModel(
-            abbreviation = entity.abbreviation,
-            code = entity.code,
-            curId = entity.curId,
-            name = entity.name,
-            nameBel = entity.nameBel,
-            nameBelMulti = entity.nameBelMulti,
-            nameEng = entity.nameEng,
-            nameEngMulti = entity.nameEngMulti,
-            nameMulti = entity.nameMulti,
-            parentID = entity.parentID,
-            periodicity = entity.periodicity,
-            quotName = entity.quotName,
-            quotNameBel = entity.quotNameBel,
-            quotNameEng = entity.quotNameEng,
-            scale = entity.scale,
-            dateEnd = entity.dateRecord,
-            dateStart = entity.dateRecord
-        )
-    }
-
-    override suspend fun loadSettings(reset: Boolean): Flow<List<ItemSettingsEntity>> =
-        settingsDao.getAllSettings()
-            .map { listDao ->
-                Log.i(TAG, "CurrencyRepositoryImp loadSettings: reset = $reset")
-                if (!reset) {
-                    Log.i(TAG, "CurrencyRepositoryImp loadSettings: list = ${listDao.size}")
-                    listDao.ifEmpty {
-                        val listApi = fetchAllCurrencies()
-                        createInitSettings(listApi)
-                    }
-                } else {
-                    val listApi = fetchAllCurrencies()
-                    createInitSettings(listApi)
-                }
-            }
+    override suspend fun loadSettings(reset: Boolean): Flow<List<ItemSettingsEntity>>
+        = if (reset) {
+            createSettings()
+            settingsDao.getAllSettings()
+        } else settingsDao.getAllSettings()
 
     override suspend fun saveSettings(settings: List<ItemSettingsEntity>) {
         Log.i(TAG, "CurrencyRepositoryImp saveSettings: size = ${settings.size}")
@@ -188,17 +120,34 @@ class CurrencyRepositoryImp @Inject constructor(
         Log.i(TAG, "CurrencyRepositoryImp saveSettings: insert = ${logInsert.size}")
     }
 
-    private fun createInitSettings(list: List<CurrencyApiModel>): List<ItemSettingsEntity> {
-        var countOrder = 3
-        Log.i(TAG, "CurrencyRepositoryImp createInitSettings: list size = ${list.size}")
-        val result = list
-            .filter {
-                it.dateEnd == CUR_LAST_DAY
-            }
-            .filter {
-                it.curId != ID_EUR && it.curId != ID_USD && it.curId != ID_RUR
-            }
-            .map {
+    private suspend fun createSettings() {
+        val listApi = fetchAllCurrencies()
+        if (listApi.isNotEmpty()) {
+            Log.i(TAG, "CurrencyRepositoryImp createSettings: list size = ${listApi.size}")
+            val (other, default) = listApi
+                .filter {
+                    it.dateEnd == CUR_LAST_DAY
+                }
+                .partition {
+                    it.curId != ID_EUR && it.curId != ID_USD && it.curId != ID_RUR
+                }
+            Log.i(TAG, "CurrencyRepositoryImp createInitSettings:" +
+                    " default = ${default.size} other = ${other.size}"
+            )
+            var countOrder = 0
+            val defaultSettings = default
+                .map {
+                    ItemSettingsEntity(
+                        id = 0,
+                        curId = it.curId,
+                        abbreviation = it.abbreviation,
+                        name = it.name,
+                        scale = it.scale,
+                        isVisible = true,
+                        orderPosition = countOrder++
+                    )
+                }
+            val otherSettings = other.map {
                 ItemSettingsEntity(
                     id = 0,
                     curId = it.curId,
@@ -209,7 +158,9 @@ class CurrencyRepositoryImp @Inject constructor(
                     orderPosition = countOrder++
                 )
             }
-        Log.i(TAG, "CurrencyRepositoryImp createInitSettings: result size = ${result.size}")
-        return DataInitSettingsSource.listCurrenciesVisibleByDefault + result
+            saveSettings(otherSettings + defaultSettings)
+        } else {
+            saveSettings(DataInitSettingsSource.listCurrenciesVisibleByDefault)
+        }
     }
 }

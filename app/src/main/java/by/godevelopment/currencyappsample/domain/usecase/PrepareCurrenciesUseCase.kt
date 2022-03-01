@@ -29,7 +29,7 @@ class PrepareCurrenciesUseCase @Inject constructor(
                     }
                     .flatMap { setting ->
                         currenciesList.filter { model ->
-                            model.abbreviation == setting.abbreviation
+                            model.curId == setting.curId
                         }
                     }
                     .sortedBy {

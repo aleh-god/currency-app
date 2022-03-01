@@ -18,7 +18,7 @@ class SettingsAdapter (
         ) : RecyclerView.ViewHolder(binding.root) {
             fun bindView(item: ItemSettingsModel) {
                 binding.apply {
-                    Log.i(TAG, "onBindViewHolder: ${item.abbreviation} check = ${item.isVisible}")
+                    Log.i(TAG, "onBindViewHolder: ${item.abbreviation} check = ${item.orderPosition}")
                     btnSwitch.setOnCheckedChangeListener(null)
                     abbreviation.text = item.abbreviation
                     curScale.text = item.scale.toString()

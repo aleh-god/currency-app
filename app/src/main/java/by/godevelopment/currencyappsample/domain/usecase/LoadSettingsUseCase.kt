@@ -21,16 +21,18 @@ class LoadSettingsUseCase @Inject constructor(
                 Log.i(TAG, "LoadSettingsUseCase reset = $reset")
                 SettingsDataModel(
                     header = stringHelper.getString(R.string.header_settings),
-                    settingItems = list.map { it ->
-                        ItemSettingsModel(
-                            curId = it.curId,
-                            curName = it.name,
-                            abbreviation = it.abbreviation,
-                            scale = it.scale,
-                            isVisible = it.isVisible,
-                            orderPosition = it.orderPosition
-                        )
-                    }
+                    settingItems = list
+                        .map { it ->
+                            ItemSettingsModel(
+                                id = it.id,
+                                curId = it.curId,
+                                curName = it.name,
+                                abbreviation = it.abbreviation,
+                                scale = it.scale,
+                                isVisible = it.isVisible,
+                                orderPosition = it.orderPosition
+                            )
+                        }
                         .sortedBy {
                             it.orderPosition
                         }

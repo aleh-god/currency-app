@@ -77,6 +77,14 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun saveOrderListItemsToItSelf(list: List<ItemSettingsModel>): List<ItemSettingsModel> {
+        return list.mapIndexed { index, itemSettingsModel ->
+            itemSettingsModel.copy(
+                orderPosition = index
+            )
+        }
+    }
+
     data class UiState(
         val isFetchingArticles: Boolean = false,
         val header: String = "",
