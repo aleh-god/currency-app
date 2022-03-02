@@ -1,17 +1,36 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.CurrencyAppSample" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.CurrencyAppSample" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primaryBrand</item>
-        <item name="colorPrimaryVariant">@color/primaryDarkBrand</item>
-        <item name="colorOnPrimary">@color/primaryTextBrand</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondaryBrand</item>
-        <item name="colorSecondaryVariant">@color/secondaryDarkBrand</item>
-        <item name="colorOnSecondary">@color/secondaryTextBrand</item>
+        <item name="colorPrimary">@color/brandPastelRedLight</item>
+        <!-- The color displayed most frequently across your app’s screens and components. This color should pass accessibilty guidelines for text / iconography when drawn on top of the surface or background color.-->
+        <item name="colorPrimaryVariant">@color/brandPastelRed</item>
+        <!-- A tonal variation of the primary color.-->
+        <item name="colorOnPrimary">@color/brandOnRed</item>
+        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the primary color.-->
+        <item name="colorSecondary">@color/brandYellowishOrangeLight</item>
+        <!-- The secondary branding color for the app, usually an accented complement to the primary branding color.-->
+        <item name="colorSecondaryVariant">@color/brandYellowishOrange</item>
+        <!-- A tonal variation of the secondary color.-->
+        <item name="colorOnSecondary">@color/brandOnYellow</item>
+        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the secondary color.-->
+        <item name="android:colorBackground">@color/brandGreenishYellowLight</item>
+        <!-- The background color appears behind scrollable content.-->
+        <item name="colorOnBackground">@color/black</item>
+        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the background color.-->
+        <item name="colorSurface">@color/brandGreenishYellow</item>
+        <!-- Surface colors affect surfaces of components, such as cards, sheets, and menus.-->
+        <item name="colorOnSurface">@color/brandPastelRedDark</item>
+        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the surface color.-->
+        <item name="colorError">@color/red</item>
+        <!-- Error color indicates errors states, for components such as text fields-->
+        <item name="colorOnError">@color/black</item>
+        <!-- A color that passes accessibility guidelines for text/iconography when drawn on top of the error color.-->
+
+        <!-- Customize your theme here. -->
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <item name="colorControlActivated">?attr/colorOnSurface</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-
     </style>
 </resources>

@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#B00020</color>
+    <color name="darkGrey">#121212</color>
 
-    <color name="primaryBrand">#a1887f</color>
-    <color name="primaryLightBrand">#d3b8ae</color>
-    <color name="primaryDarkBrand">#725b53</color>
-    <color name="secondaryBrand">#5d4037</color>
-    <color name="secondaryLightBrand">#8b6b61</color>
-    <color name="secondaryDarkBrand">#321911</color>
-    <color name="primaryTextBrand">#000000</color>
-    <color name="secondaryTextBrand">#ffffff</color>
+    <!-- Primary color. Brand LightBrand DarkBrand TextBrand-->
+    <color name="brandPastelRed">#bb371a</color>
+    <color name="brandPastelRedLight">#f46845</color>
+    <color name="brandPastelRedDark">#840000</color>
+    <color name="brandOnRed">#ffffff</color>
+
+    <!-- Secondary color. Brand LightBrand DarkBrand TextBrand-->
+    <color name="brandYellowishOrange">#eba83a</color>
+    <color name="brandYellowishOrangeLight">#ffd96b</color>
+    <color name="brandYellowishOrangeDark">#b47900</color>
+    <color name="brandOnYellow">#000000</color>
+
+    <color name="brandGreenishYellow">#d5dbb3</color>
+    <color name="brandGreenishYellowLight">#ffffe5</color>
+    <color name="brandGreenishYellowDark">#a3a983</color>
+
+    <color name="brandOrangyYellow">#fff8d9</color>
+    <color name="brandOrangyYellowLight">#ffffff</color>
+    <color name="brandOrangyYellowDark">#ccc5a7</color>
 </resources>

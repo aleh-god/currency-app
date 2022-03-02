@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Widget.CurrencyApp.Toolbar" parent="Widget.MaterialComponents.Toolbar">
-
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:elevation">@dimen/main_elevation</item>
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="Widget.CurrencyApp.HeaderTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.HeaderTextView</item>
+        <item name="android:layout_marginStart">@dimen/margin_start_horizontal_collum</item>
+    </style>
 
+    <style name="Widget.CurrencyApp.BodyTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.BodyTextView</item>
+        <item name="android:layout_marginStart">@dimen/margin_start_horizontal_collum</item>
+    </style>
+
+    <style name="Widget.CurrencyApp.CellTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.CellTextView</item>
+        <item name="android:layout_marginStart">@dimen/margin_start_horizontal_collum</item>
+    </style>
 </resources>

@@ -15,11 +15,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/primaryBrand"
-        android:elevation="5dp"
-        app:titleTextColor="@color/white"
         app:menu="@menu/tool_menu"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        style="@style/Widget.CurrencyApp.Toolbar"
         />
 
     <androidx.fragment.app.FragmentContainerView

@@ -5,4 +5,11 @@
     <string name="header_settings">Пералік даступных валют:</string>
     <string name="list_link">Спіс курсаў валют</string>
     <string name="settings">Наладкі</string>
+    <string name="save_settings">Захаваць налады</string>
+    <string name="refresh_settings">Абнавіць налады</string>
+    <string name="error_load">Памылка!</string>
+    <string name="alert_no_data">Дадзеныя недаступныя</string>
+    <string name="alert_loading">Дадзеныя загружаюцца...</string>
+    <string name="header_settings_init">Спіс ініцыятыўных валют:</string>
+    <string name="text_snackbar">Перазагрузіць</string>
 </resources>

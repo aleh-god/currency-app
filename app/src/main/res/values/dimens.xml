@@ -3,4 +3,5 @@
     <dimen name="width_horizontal_collum">80dp</dimen>
     <dimen name="width_horizontal_collum_end">30dp</dimen>
     <dimen name="margin_start_horizontal_collum">5dp</dimen>
+    <dimen name="main_elevation">5dp</dimen>
 </resources>

@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:background="@color/primaryLightBrand"
     tools:context=".presentation.ui.currencieslist.CurrenciesListFragment"
     >
 
@@ -18,10 +17,8 @@
         app:layout_constraintBottom_toTopOf="@id/barrier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/date_old"
-        android:layout_marginStart="@dimen/margin_start_horizontal_collum"
+        style="@style/Widget.CurrencyApp.BodyTextView"
         android:layout_marginVertical="5dp"
-        android:gravity="start"
-        style="@style/TextAppearance.Material3.BodyMedium"
         tools:text="Курс беллорусского рубля: "
         />
 
@@ -33,9 +30,8 @@
         app:layout_constraintBottom_toTopOf="@id/barrier"
         app:layout_constraintStart_toEndOf="@id/header"
         app:layout_constraintEnd_toStartOf="@id/date_new"
-        android:layout_marginStart="@dimen/margin_start_horizontal_collum"
         android:layout_marginVertical="5dp"
-        android:gravity="center"
+        style="@style/Widget.CurrencyApp.CellTextView"
         tools:text="01-01-2022"
         />
 
@@ -48,8 +44,7 @@
         app:layout_constraintStart_toEndOf="@id/date_old"
         app:layout_constraintBottom_toTopOf="@id/barrier"
         android:layout_marginVertical="5dp"
-        android:layout_marginStart="@dimen/margin_start_horizontal_collum"
-        android:gravity="center"
+        style="@style/Widget.CurrencyApp.CellTextView"
         tools:text="31-01-2022"
         />
 
@@ -71,6 +66,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_currency"
+        />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/rv_currencies"
+        app:layout_constraintBottom_toBottomOf="@id/rv_currencies"
+        app:layout_constraintStart_toStartOf="@id/rv_currencies"
+        app:layout_constraintEnd_toEndOf="@id/rv_currencies"
+        android:visibility="visible"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

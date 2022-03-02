@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">Currency App Sample</string>
-    <string name="header_rate">Belarusian ruble exchange rate</string>
+    <string name="header_rate">Belarus ruble exchange rate</string>
     <string name="settings">Settings</string>
     <string name="list_link">Rates list</string>
     <string name="header_settings">List of available currencies:</string>
     <string name="save_settings">Save settings</string>
     <string name="refresh_settings">Refresh settings</string>
     <string name="error_load">Error!</string>
+    <string name="alert_no_data">Data not available.</string>
+    <string name="alert_loading">Data is loading...</string>
+    <string name="header_settings_init">List of init currencies:</string>
+    <string name="text_snackbar">Reload</string>
 </resources>
