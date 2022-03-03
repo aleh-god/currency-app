@@ -1,15 +1,12 @@
 package by.godevelopment.currencyappsample.di
 
-import android.util.Log
-import by.godevelopment.currencyappsample.commons.TAG
+import by.godevelopment.currencyappsample.data.BASE_URL
 import by.godevelopment.currencyappsample.data.datasources.network.CurrencyApi
 import by.godevelopment.currencyappsample.data.datasources.network.RemoteDataSource
-import by.godevelopment.currencyappsample.data.repositories.CurrencyRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,12 +16,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
-    init {
-        Log.i(TAG, "NetworkModule init")
-    }
-
     @Provides
-    fun provideBaseUrl() : String = "https://www.nbrb.by/api/exrates/"// BASE_URL
+    fun provideBaseUrl() : String = BASE_URL
 
     @Provides
     @Singleton
@@ -43,7 +36,6 @@ object NetworkModule {
         .baseUrl(BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
-//        .addConverterFactory(MoshiConverterFactory.create())
         .build()
 
     @Provides

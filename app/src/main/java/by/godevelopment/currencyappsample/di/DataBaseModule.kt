@@ -1,10 +1,7 @@
 package by.godevelopment.currencyappsample.di
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Room
-import by.godevelopment.currencyappsample.commons.TAG
-import by.godevelopment.currencyappsample.data.datasources.database.CurrencyDao
 import by.godevelopment.currencyappsample.data.datasources.database.CurrencyDatabase
 import by.godevelopment.currencyappsample.data.datasources.database.RateCurrencyDao
 import by.godevelopment.currencyappsample.data.datasources.database.SettingsDao
@@ -19,15 +16,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object DataBaseModule {
-    init {
-        Log.i(TAG, "DatabaseModule init")
-    }
-
-    @Provides
-    fun provideCurrencyDatabaseDao(database: CurrencyDatabase): CurrencyDao {
-        return database.getCurrencyDao()
-    }
-
     @Provides
     fun provideRateDatabaseDao(database: CurrencyDatabase): RateCurrencyDao {
         return database.getRateCurrencyDao()
@@ -42,7 +30,6 @@ object DataBaseModule {
     @Singleton
     fun provideCurrencyDatabase(
         @ApplicationContext appContext: Context,
-        providerCurrency: Provider<CurrencyDao>,
         providerRate: Provider<RateCurrencyDao>,
         providerSettings: Provider<SettingsDao>
     ): CurrencyDatabase {

@@ -1,12 +1,10 @@
 package by.godevelopment.currencyappsample.presentation.ui.settings.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.databinding.ItemSettingsBinding
 import by.godevelopment.currencyappsample.domain.models.ItemSettingsModel
 
@@ -18,7 +16,6 @@ class SettingsAdapter (
         ) : RecyclerView.ViewHolder(binding.root) {
             fun bindView(item: ItemSettingsModel) {
                 binding.apply {
-                    Log.i(TAG, "onBindViewHolder: ${item.abbreviation} check = ${item.orderPosition}")
                     btnSwitch.setOnCheckedChangeListener(null)
                     abbreviation.text = item.abbreviation
                     curScale.text = item.scale.toString()
@@ -26,7 +23,6 @@ class SettingsAdapter (
                     btnSwitch.isChecked = item.isVisible
                     btnSwitch.setOnCheckedChangeListener { _, isChecked ->
                         changeVisibleCallBack(item.curId, isChecked)
-                        Log.i(TAG, "setOnCheckedChangeListener: ${item.orderPosition} = ${item.abbreviation} check = $isChecked")
                     }
                 }
             }
@@ -75,7 +71,6 @@ class SettingsAdapter (
     override fun getItemCount(): Int = listItems.size
 
     fun moveItem(fromPosition: Int, toPosition: Int) {
-        Log.i(TAG, "moveItem: fromPosition = $fromPosition toPosition = $toPosition")
         val newList = listItems.toMutableList()
         val fromItem = newList[fromPosition]
         newList.removeAt(fromPosition)

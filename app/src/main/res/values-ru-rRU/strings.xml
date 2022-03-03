@@ -11,5 +11,6 @@
     <string name="alert_no_data">Данные недоступны</string>
     <string name="alert_loading">Данные загружаются...</string>
     <string name="header_settings_init">Список начальных валют:</string>
-    <string name="text_snackbar">Перезагрузить</string>
+    <string name="text_snackbar_reload">Перезагрузить</string>
+    <string name="text_snackbar_ok">Принял</string>
 </resources>

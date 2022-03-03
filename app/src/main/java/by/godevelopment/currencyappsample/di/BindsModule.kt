@@ -11,7 +11,6 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 @Module
 abstract class BindsModule {
-
     @Binds
     abstract fun bindCurrencyRepository(currencyRepositoryImp: CurrencyRepositoryImp): CurrencyRep
 

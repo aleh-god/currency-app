@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 class GetAllRatesUseCase @Inject constructor(
     private val currencyRep: CurrencyRep,
-    private val dataHelpers: DataHelpers,
-    private val stringHelper: StringHelper
+    private val dataHelpers: DataHelpers
 ) : BaseUseCase<CurrenciesDataModel, EmptyParams>() {
     override suspend fun run(params: EmptyParams): CurrenciesDataModel =
         coroutineScope {
@@ -59,7 +58,7 @@ class GetAllRatesUseCase @Inject constructor(
                 newData = dataHelpers.convertDateStringToString(currenciesNew.first().date)
             }
             CurrenciesDataModel(
-                header = stringHelper.getString(R.string.header_rate),
+                EMPTY_STRING,
                 oldData,
                 newData,
                 currencyItems

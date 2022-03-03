@@ -3,8 +3,11 @@ package by.godevelopment.currencyappsample.presentation.ui.settings
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.godevelopment.currencyappsample.R
 import by.godevelopment.currencyappsample.commons.INIT_VALUE_REFRESH_SETTINGS
 import by.godevelopment.currencyappsample.commons.TAG
+import by.godevelopment.currencyappsample.domain.helpers.StringHelper
+import by.godevelopment.currencyappsample.domain.models.Event
 import by.godevelopment.currencyappsample.domain.models.ItemSettingsModel
 import by.godevelopment.currencyappsample.domain.usecase.LoadSettingsUseCase
 import by.godevelopment.currencyappsample.domain.usecase.SaveSettingsUseCase
@@ -16,10 +19,14 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val saveSettingsUseCase: SaveSettingsUseCase,
-    private val loadSettingsUseCase: LoadSettingsUseCase
+    private val loadSettingsUseCase: LoadSettingsUseCase,
+    private val stringHelper: StringHelper
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
+
+    private val _uiEvent  = MutableStateFlow<Event<String>?>(null)
+    val uiEvent: StateFlow<Event<String>?> = _uiEvent
 
     init {
         loadSettings(INIT_VALUE_REFRESH_SETTINGS)
@@ -31,22 +38,27 @@ class SettingsViewModel @Inject constructor(
             loadSettingsUseCase(refresh)
                 .onStart {
                     UiState(
-                        isFetchingArticles = true,
-                        header = "Data is loading..."
+                        isFetchingData = true,
+                        header = stringHelper.getString(R.string.alert_loading)
                     )
                 }
                 .catch { exception ->
-                    Log.i(TAG, "viewModelScope.launch.catch: ${exception.message}")
                     _uiState.value = UiState(
-                        isFetchingArticles = false,
-                        header = "${exception.message}"
+                        isFetchingData = false,
+                        header = stringHelper.getString(R.string.alert_no_data)
+                    )
+                    _uiEvent.value = Event(
+                        "${exception.message}"
                     )
                 }
                 .collect {
                     _uiState.value = UiState(
-                        isFetchingArticles = false,
+                        isFetchingData = false,
                         header = it.header,
                         settingsItems = it.settingItems
+                    )
+                    if (it.settingItems.size == 3) _uiEvent.value = Event(
+                        stringHelper.getString(R.string.alert_reset_settings)
                     )
                 }
         }
@@ -54,13 +66,15 @@ class SettingsViewModel @Inject constructor(
 
     fun saveSettings(listItems: List<ItemSettingsModel>) {
         viewModelScope.launch {
+            Log.i(TAG, "saveSettings: list size = ${listItems.size}")
             saveSettingsUseCase.run(listItems)
+            _uiEvent.value = Event(
+                stringHelper.getString(R.string.alert_save_settings)
+            )
         }
-        // TODO "add alert"
     }
 
     fun changeVision(curId: Int, isChecked: Boolean) {
-        Log.i(TAG, "SettingsViewModel changeVision: curId = $curId = $isChecked")
         val originUiState = uiState.value
         val originSettingsItems = originUiState.settingsItems.toMutableList()
         val originIndex = originSettingsItems.indexOfFirst {
@@ -77,18 +91,22 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun saveOrderListItemsToItSelf(list: List<ItemSettingsModel>): List<ItemSettingsModel> {
-        return list.mapIndexed { index, itemSettingsModel ->
+    fun saveOrderListItemsToItSelf(list: List<ItemSettingsModel>) {
+        val reOrderedList = list.mapIndexed { index, itemSettingsModel ->
             itemSettingsModel.copy(
                 orderPosition = index
             )
         }
+        val originUiState = uiState.value
+        val newUiState = originUiState.copy(
+            settingsItems = reOrderedList
+        )
+        _uiState.value = newUiState
     }
 
     data class UiState(
-        val isFetchingArticles: Boolean = false,
+        val isFetchingData: Boolean = false,
         val header: String = "",
         val settingsItems: List<ItemSettingsModel> = listOf(),
-        val userMessages: List<String> = listOf()
     )
 }

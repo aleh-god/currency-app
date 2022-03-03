@@ -11,5 +11,6 @@
     <string name="alert_no_data">Дадзеныя недаступныя</string>
     <string name="alert_loading">Дадзеныя загружаюцца...</string>
     <string name="header_settings_init">Спіс ініцыятыўных валют:</string>
-    <string name="text_snackbar">Перазагрузіць</string>
+    <string name="text_snackbar_reload">Перазагрузіць</string>
+    <string name="text_snackbar_ok">Добра</string>
 </resources>

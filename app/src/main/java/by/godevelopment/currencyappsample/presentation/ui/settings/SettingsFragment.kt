@@ -1,6 +1,5 @@
 package by.godevelopment.currencyappsample.presentation.ui.settings
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +18,7 @@ import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.databinding.SettingsFragmentBinding
 import by.godevelopment.currencyappsample.presentation.ui.settings.adapters.SettingsAdapter
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -74,7 +74,8 @@ class SettingsFragment : Fragment() {
             ) {
                 viewHolder.itemView.scaleY = 1.0f
                 viewHolder.itemView.alpha = 1.0f
-                adapter.listItems = viewModel.saveOrderListItemsToItSelf(adapter.listItems)
+                val oldList = adapter.listItems
+                viewModel.saveOrderListItemsToItSelf(oldList)
                 super.clearView(recyclerView, viewHolder)
             }
         }
@@ -88,11 +89,11 @@ class SettingsFragment : Fragment() {
         setupToolbar()
         setupRv()
         setupUI()
+        setupEvent()
         return binding.root
     }
 
     private fun setupRv() {
-        Log.i(TAG, "SettingsFragment setupRv")
         binding.rvSettings.adapter = adapter
         helper.attachToRecyclerView(binding.rvSettings)
     }
@@ -101,9 +102,28 @@ class SettingsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
+                    binding.progressBar.visibility =
+                        if (uiState.isFetchingData) View.VISIBLE else View.INVISIBLE
                     binding.header.text = uiState.header
-                    Log.i(TAG, "SettingsFragment setupUI: ${uiState.settingsItems.size}")
                     adapter.listItems = uiState.settingsItems
+                }
+            }
+        }
+    }
+
+    private fun setupEvent() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiEvent.collect { event ->
+                    event?.let {
+                        it.get()?.let { message ->
+                            Snackbar
+                                .make(binding.root, message, Snackbar.LENGTH_INDEFINITE)
+                                .setAction(getString(R.string.text_snackbar_ok))
+                                {  }
+                                .show()
+                        }
+                    }
                 }
             }
         }
@@ -115,13 +135,11 @@ class SettingsFragment : Fragment() {
             toolbar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.save_settings -> {
-                        Log.i(TAG, "onOptionsItemSelected: save")
                         val listItems = adapter.listItems
                         viewModel.saveSettings(listItems)
                         true
                     }
                     R.id.refresh_settings -> {
-                        Log.i(TAG, "onOptionsItemSelected: refresh_list ")
                         viewModel.loadSettings(true)
                         true
                     }

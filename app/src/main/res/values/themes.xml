@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.CurrencyAppSample" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Primary brand color. -->
+
         <item name="colorPrimary">@color/brandPastelRedLight</item>
         <!-- The color displayed most frequently across your app’s screens and components. This color should pass accessibilty guidelines for text / iconography when drawn on top of the surface or background color.-->
         <item name="colorPrimaryVariant">@color/brandPastelRed</item>
@@ -30,6 +30,7 @@
         <!-- Customize your theme here. -->
         <item name="colorControlNormal">?attr/colorOnPrimary</item>
         <item name="colorControlActivated">?attr/colorOnSurface</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>

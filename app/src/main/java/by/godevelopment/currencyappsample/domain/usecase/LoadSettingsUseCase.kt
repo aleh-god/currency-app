@@ -19,8 +19,13 @@ class LoadSettingsUseCase @Inject constructor(
         settingsRep.loadSettings(reset)
             .map { list ->
                 Log.i(TAG, "LoadSettingsUseCase reset = $reset")
+
                 SettingsDataModel(
-                    header = stringHelper.getString(R.string.header_settings),
+                    header = if (list.size > 3) {
+                        stringHelper.getString(R.string.header_settings)
+                    } else {
+                        stringHelper.getString(R.string.header_settings_init)
+                    },
                     settingItems = list
                         .map { it ->
                             ItemSettingsModel(

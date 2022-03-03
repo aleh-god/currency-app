@@ -16,8 +16,10 @@ class PrepareCurrenciesUseCase @Inject constructor(
     suspend operator fun invoke(): Flow<CurrenciesDataModel> =
         settingsRep.loadSettings(INIT_VALUE_REFRESH_SETTINGS)
             .map { settings ->
+                Log.i(TAG, "PrepareCurrenciesUseCase: settings size = ${settings.size}")
                 val currenciesDataModel = getAllRatesUseCase.run(EmptyParams)
                 val currenciesList = currenciesDataModel.currencyItems
+                Log.i(TAG, "PrepareCurrenciesUseCase: currenciesList size = ${currenciesList.size}")
                 val orderMap = settings
                     .sortedBy { it.orderPosition }
                     .associate {
@@ -35,7 +37,6 @@ class PrepareCurrenciesUseCase @Inject constructor(
                     .sortedBy {
                         orderMap[it.curId]
                     }
-                Log.i(TAG, "PrepareCurrenciesUseCase resultList = ${resultList.size}")
                 currenciesDataModel.copy(
                     currencyItems = resultList
                 )
