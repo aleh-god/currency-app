@@ -13,4 +13,6 @@
     <string name="header_settings_init">List of init currencies:</string>
     <string name="text_snackbar_reload">Reload</string>
     <string name="text_snackbar_ok">OK</string>
+    <string name="alert_reset_settings">Settings have been reseted</string>
+    <string name="alert_save_settings">Settings have been saved</string>
 </resources>
