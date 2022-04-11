@@ -1,11 +1,7 @@
 package by.godevelopment.currencyappsample.domain.usecase
 
-import android.util.Log
-import by.godevelopment.currencyappsample.R
 import by.godevelopment.currencyappsample.commons.EMPTY_STRING
-import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.domain.helpers.DataHelpers
-import by.godevelopment.currencyappsample.domain.helpers.StringHelper
 import by.godevelopment.currencyappsample.domain.models.CurrenciesDataModel
 import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 import by.godevelopment.currencyappsample.domain.repositories.CurrencyRep
@@ -21,8 +17,6 @@ class GetAllRatesUseCase @Inject constructor(
         coroutineScope {
             val today = dataHelpers.getCurrentDayString()
             val yesterday = dataHelpers.getYesterdayDateString()
-            Log.i(TAG, "GetCurrenciesUseCase run: today = $today & yesterday = $yesterday")
-
             val deferredNewRates = async {
                 currencyRep.fetchAllRatesByDate(today)
             }
@@ -31,8 +25,6 @@ class GetAllRatesUseCase @Inject constructor(
             }
             val currenciesNew = deferredNewRates.await()
             val currenciesOld = deferredOldRates.await()
-            Log.i(TAG, "GetCurrenciesUseCase run: currenciesNew.size = ${currenciesNew.size}")
-            Log.i(TAG, "GetCurrenciesUseCase run: currenciesOld.size = ${currenciesOld.size}")
             val currencyItems: MutableList<ItemCurrencyModel> = mutableListOf()
             var oldData = EMPTY_STRING
             var newData = EMPTY_STRING

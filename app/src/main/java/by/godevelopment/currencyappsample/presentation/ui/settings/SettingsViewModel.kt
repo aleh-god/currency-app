@@ -74,7 +74,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun changeVision(curId: Int, isChecked: Boolean) {
+    fun changeVision(curId: Int, isVisible: Boolean) {
         val originUiState = uiState.value
         val originSettingsItems = originUiState.settingsItems.toMutableList()
         val originIndex = originSettingsItems.indexOfFirst {
@@ -82,7 +82,7 @@ class SettingsViewModel @Inject constructor(
         }
         if (originIndex != -1) {
             val originItem = originSettingsItems[originIndex]
-            val newItem = originItem.copy(isVisible = isChecked)
+            val newItem = originItem.copy(isVisible = isVisible)
             originSettingsItems[originIndex] = newItem
             val newUiState = originUiState.copy(
                 settingsItems = originSettingsItems

@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import by.godevelopment.currencyappsample.R
 import by.godevelopment.currencyappsample.databinding.CurrenciesListFragmentBinding
-import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 import by.godevelopment.currencyappsample.presentation.ui.currencieslist.adapters.ListAdapter
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
@@ -28,7 +27,6 @@ class CurrenciesListFragment : Fragment() {
 
     private var _binding: CurrenciesListFragmentBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: CurrenciesListViewModel by viewModels()
 
     override fun onCreateView(
@@ -43,6 +41,8 @@ class CurrenciesListFragment : Fragment() {
     }
 
     private fun setupUI() {
+        val adapter = ListAdapter()
+        binding.rvCurrencies.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { uiState ->
@@ -51,7 +51,7 @@ class CurrenciesListFragment : Fragment() {
                     binding.header.text = uiState.header
                     binding.dateOld.text = uiState.oldData
                     binding.dateNew.text = uiState.newData
-                    setupAdapter(uiState.CurrencyItems)
+                        adapter.listItems = uiState.CurrencyItems
                 }
             }
         }
@@ -72,12 +72,6 @@ class CurrenciesListFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    private fun setupAdapter(listItems: List<ItemCurrencyModel>) {
-        binding.rvCurrencies.adapter = ListAdapter().apply {
-            this.listItems = listItems
         }
     }
 

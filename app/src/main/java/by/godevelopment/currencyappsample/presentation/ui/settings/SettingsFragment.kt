@@ -1,7 +1,6 @@
 package by.godevelopment.currencyappsample.presentation.ui.settings
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.RecyclerView
 import by.godevelopment.currencyappsample.R
-import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.databinding.SettingsFragmentBinding
 import by.godevelopment.currencyappsample.presentation.ui.settings.adapters.SettingsAdapter
 import com.google.android.material.appbar.MaterialToolbar
@@ -35,10 +33,9 @@ class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
     private val adapter: SettingsAdapter by lazy {
-        val callback: (Int, Boolean) -> Unit = {
-                pos, vis -> viewModel.changeVision(pos, vis)
+        SettingsAdapter {
+                position, vision -> viewModel.changeVision(position, vision)
         }
-        SettingsAdapter(callback)
     }
 
     private val helper: ItemTouchHelper = ItemTouchHelper(

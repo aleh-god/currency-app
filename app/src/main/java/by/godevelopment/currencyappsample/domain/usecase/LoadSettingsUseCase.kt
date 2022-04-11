@@ -1,8 +1,6 @@
 package by.godevelopment.currencyappsample.domain.usecase
 
-import android.util.Log
 import by.godevelopment.currencyappsample.R
-import by.godevelopment.currencyappsample.commons.TAG
 import by.godevelopment.currencyappsample.domain.helpers.StringHelper
 import by.godevelopment.currencyappsample.domain.models.ItemSettingsModel
 import by.godevelopment.currencyappsample.domain.models.SettingsDataModel
@@ -18,8 +16,6 @@ class LoadSettingsUseCase @Inject constructor(
     suspend operator fun invoke(reset: Boolean): Flow<SettingsDataModel> =
         settingsRep.loadSettings(reset)
             .map { list ->
-                Log.i(TAG, "LoadSettingsUseCase reset = $reset")
-
                 SettingsDataModel(
                     header = if (list.size > 3) {
                         stringHelper.getString(R.string.header_settings)
