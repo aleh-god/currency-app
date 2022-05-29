@@ -13,14 +13,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
 @Module
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
     @Provides
     fun provideBaseUrl() : String = BASE_URL
 
     @Provides
-    @Singleton
     fun provideOkHttpClient() = OkHttpClient.Builder()
         .addInterceptor(
             HttpLoggingInterceptor().apply { setLevel(HttpLoggingInterceptor.Level.BODY) }
@@ -28,7 +27,6 @@ object NetworkModule {
         .build()
 
     @Provides
-    @Singleton
     fun provideRetrofit(
         BASE_URL : String,
         okHttpClient: OkHttpClient
@@ -41,10 +39,4 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideCurrencyApi(retrofit: Retrofit) = retrofit.create(CurrencyApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideRemoteDataSource(
-        currencyApi: CurrencyApi
-    ): RemoteDataSource = RemoteDataSource(currencyApi)
 }

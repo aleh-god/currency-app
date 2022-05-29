@@ -10,6 +10,7 @@ import by.godevelopment.currencyappsample.domain.models.Event
 import by.godevelopment.currencyappsample.domain.models.ItemCurrencyModel
 import by.godevelopment.currencyappsample.domain.usecase.PrepareCurrenciesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,17 +21,20 @@ class CurrenciesListViewModel @Inject constructor(
     private val stringHelper: StringHelper
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _uiEvent  = MutableStateFlow<Event<String>?>(null)
-    val uiEvent: StateFlow<Event<String>?> = _uiEvent
+    val uiEvent: StateFlow<Event<String>?> = _uiEvent.asStateFlow()
+
+    private var suspendJob: Job? = null
 
     init {
         loadCurrencies()
     }
 
     fun loadCurrencies() {
-        viewModelScope.launch {
+       suspendJob?.cancel()
+       suspendJob = viewModelScope.launch {
             prepareCurrenciesUseCase()
                 .onStart {
                     _uiState.value = UiState(
@@ -44,9 +48,7 @@ class CurrenciesListViewModel @Inject constructor(
                         isFetchingData = false,
                         header = stringHelper.getString(R.string.alert_no_data)
                     )
-                    _uiEvent.value = Event(
-                        "${exception.message}"
-                    )
+                    _uiEvent.emit(Event(exception.message))
                 }
                 .collect {
                     _uiState.value = UiState(

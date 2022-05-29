@@ -12,6 +12,7 @@ import by.godevelopment.currencyappsample.domain.models.ItemSettingsModel
 import by.godevelopment.currencyappsample.domain.usecase.LoadSettingsUseCase
 import by.godevelopment.currencyappsample.domain.usecase.SaveSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,10 +24,12 @@ class SettingsViewModel @Inject constructor(
     private val stringHelper: StringHelper
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _uiEvent  = MutableStateFlow<Event<String>?>(null)
-    val uiEvent: StateFlow<Event<String>?> = _uiEvent
+    val uiEvent: StateFlow<Event<String>?> = _uiEvent.asStateFlow()
+
+    private var suspendJob: Job? = null
 
     init {
         loadSettings(INIT_VALUE_REFRESH_SETTINGS)
@@ -34,7 +37,8 @@ class SettingsViewModel @Inject constructor(
 
     fun loadSettings(refresh: Boolean) {
         Log.i(TAG, "loadSettings: $refresh")
-        viewModelScope.launch {
+        suspendJob?.cancel()
+        suspendJob = viewModelScope.launch {
             loadSettingsUseCase(refresh)
                 .onStart {
                     UiState(
@@ -47,9 +51,7 @@ class SettingsViewModel @Inject constructor(
                         isFetchingData = false,
                         header = stringHelper.getString(R.string.alert_no_data)
                     )
-                    _uiEvent.value = Event(
-                        "${exception.message}"
-                    )
+                    _uiEvent.value = Event(exception.message)
                 }
                 .collect {
                     _uiState.value = UiState(
