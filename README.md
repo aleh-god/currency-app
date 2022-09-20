@@ -1,14 +1,24 @@
-# currency-app-sample
-Android interview task. Currency API  implementation.
+# Application for tracking the exchange rates of the National Bank;
 
-Technologies used:
-1. Navigation Component
-2. viewBinding
-3. Coroutines/Flows
-4. Clean architecture, MVVM
-5. Hilt
-6. Retrofit
-7. ROOM   
-8. Material Design
+## Name project:
+- Currency app;
+
+## Domain:
+- Finance, Exchange rates;
+
+## Technologies stack:
+- Hilt, Retrofit, ROOM, Navigation Component, viewBinding, Coroutines/Flows, Material Design, clean architecture, MVVM;
+
+## Goals and features:
+- Display a list of all available currencies;
+- Implement user settings in order (drag and drop) and the list of monitored currencies;
+- Implement the preservation of previous values and show them if there is no Internet connection;
+- Implement support for light and dark themes;
+
+## Solution of problems:
+- Implement the data cache in the data layer.
 
 <img alt="demo" src="https://github.com/aleh-god/currency-app-sample/blob/main/CurrencyAppDemo.gif" />
+<img alt="demo1" src="https://github.com/aleh-god/currency-app-sample/blob/main/currencies-app-1" />
+<img alt="demo2" src="https://github.com/aleh-god/currency-app-sample/blob/main/currencies-app-2" />
+<img alt="demo3" src="https://github.com/aleh-god/currency-app-sample/blob/main/currencies-app-3" />
